@@ -68,8 +68,9 @@ class ApiCaller:
 
     def __get_error_from_response(self, error_text, format):
         if format == FORMAT_JSON:
-            import simplejson as json
-            text = json.load(error_text)
+            text = simplejson.load(error_text)
+            import logging
+            logging.error("err: %r" % text)
             return ApiError(text['error']['error_code'], text['error']['error_msg'])
         else:
             from xml.dom import minidom
