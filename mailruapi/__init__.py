@@ -14,6 +14,6 @@ def auth(f):
 			"token": g.token,
 		}
 
-        return f(*a, **kw)
+		return f(*a, **kw)
 
-    return fb_auth
+    return mailru_auth
