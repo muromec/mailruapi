@@ -33,13 +33,6 @@ class ApiCaller:
         self.app_id = app_id
         self.secret_key = secret_key
         self.format = format
-
-    def __calc_signature(self, params):
-        params_str = ''
-        for key in sorted(params.iterkeys()):
-            params_str += (key + '=' + params[key])
-        return hashlib.md5(params_str + self.secret_key).hexdigest()
-
     def __prepare_api_params(self, format, method_name, params, session_key, uid):
         user_auth_param = None
         user_auth_data = None
@@ -63,7 +56,7 @@ class ApiCaller:
                 api_params[param_name] = ''
         for param in api_params:
             api_params[param] = unicode(api_params[param]).encode('utf-8')
-        api_params['sig'] = self.__calc_signature(api_params)
+        api_params['sig'] = calc_signature(api_params, self.secret_key)
         return api_params
 
     def __get_error_from_response(self, error_text, format):
@@ -102,14 +95,15 @@ class ApiCaller:
             error = self.__get_error_from_response(e, format)
             raise error
 
-class MyMailUtil:
-    # Converts http://my.mail.ru/inbox/user/ to user@inbox.ru
-    def link_to_email(self, link):
-        if link is None:
-            return None
-        link = link[len('http://my.mail.ru/'):-1]
-        parts = link.split('/')
-        return parts[1] + '@' + parts[0] + '.ru'
+
+def calc_signature(params, secret_key, skip=('sig',)):
+    params_str = ''
+    for key in sorted(params.iterkeys()):
+        if key in skip:
+            continue
+
+        params_str += (key + '=' + params[key])
+    return hashlib.md5(params_str + secret_key).hexdigest()
 
 
 
