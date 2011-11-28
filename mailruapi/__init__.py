@@ -1,5 +1,5 @@
 from pymymailru import *
-from flask import requst, session, g
+from flask import request, session, g
 
 def auth(f):
     from functools import wraps
