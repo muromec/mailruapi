@@ -7,13 +7,13 @@ def auth(f):
     @wraps(f)
     def mailru_auth(*a, **kw):
 
-		g.token = request.args['session_key']
+        g.token = request.args['session_key']
 
-		session['auth'] = {
-			"user_id": request.args['vid'],
-			"token": g.token,
-		}
+        session['auth'] = {
+            "user_id": request.args['vid'],
+            "token": g.token,
+        }
 
-		return f(*a, **kw)
+        return f(*a, **kw)
 
     return mailru_auth

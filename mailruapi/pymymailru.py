@@ -5,7 +5,10 @@ Created by Alexey Moskvin, 2011
 
 import hashlib
 import urllib, urllib2
-from django.utils import simplejson
+try:
+    from django.utils import simplejson
+except ImportError:
+    import simplejson
 
 METHOD_GET = 'get'
 METHOD_POST = 'post'
